@@ -146,8 +146,21 @@ instruction
     /i:adr_inst
     /i:add_inst
     /i:adrp_inst
+    /i:ubfiz_inst
+    /i:uxtb_inst
+    /i:uxth_inst
+    /i:sbfiz_inst
+    /i:sbfx_inst
+    /i:ubfx_inst
     /i:bfi_inst
     /i:bfxil_inst
+    /i:sxtw_inst
+    / i:clz_inst
+    / i:extr_inst
+    / i:rbit_inst
+    / i:rev_inst
+    / i:rev16_inst
+    / i:rev32_inst
     / i:sub_inst
     / i:sbc_inst
     / i:umsubl_inst
@@ -170,6 +183,7 @@ instruction
     / i:udiv_inst
     / i:sdiv_inst
     / i:and_inst
+    / i:cls_inst
     / i:orr_inst
     / i:eor_inst
     / i:mov_inst
@@ -253,7 +267,7 @@ add_inst "Instrucción de Suma"
 adr_inst "Instrucción de Adr"
     = _* "ADR"i _* rd:reg64 _* "," _* src1:label _* comment? "\n"?
         {
-            const node = createNode('INSTRUCTION', 'ADRP');
+            const node = createNode('INSTRUCTION', 'ADR');
             const rdNode = createNode('DESTINATION', 'RD');
             const src1Node = createNode('SOURCE1', 'SRC1');
             addChild(rdNode, rd);
@@ -264,7 +278,7 @@ adr_inst "Instrucción de Adr"
         }
     / _* "ADR"i _* rd:reg32 _* "," _* src1:label _* comment? "\n"?
         {
-            const node = createNode('INSTRUCTION', 'ADC');
+            const node = createNode('INSTRUCTION', 'ADR');
             const rdNode = createNode('DESTINATION', 'RD');
             const src1Node = createNode('SOURCE1', 'SRC1');
             addChild(rdNode, rd);
@@ -273,6 +287,171 @@ adr_inst "Instrucción de Adr"
             addChild(node, src1Node);
             return node;
 }
+
+uxtb_inst "Instrucción de UXTB"
+    = _* "UXTB"i _* rd:(reg64/reg32) _* "," _* src1:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'UXTB');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+
+uxth_inst "Instrucción de UXTH"
+    = _* "UXTH"i _* rd:(reg64/reg32) _* "," _* src1:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'UXTH');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+
+sxtw_inst "Instrucción de UXTH"
+    = _* "SXTW"i _* rd:(reg64/reg32) _* "," _* src1:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'SXTW');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+   
+
+cls_inst "Instrucción de Cls"
+    = _* "CLS"i _* rd:reg64 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CLS');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+    / _* "CLS"i _* rd:reg32 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CLS');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+}
+
+clz_inst "Instrucción de Clz"
+    = _* "CLZ"i _* rd:reg64 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CLZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+    / _* "CLZ"i _* rd:reg32 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CLZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+}
+
+rbit_inst "Instrucción de RBIT"
+    = _* "RBIT"i _* rd:reg64 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'RBIT');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+    / _* "RBIT"i _* rd:reg32 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'RBIT');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+}
+
+rev_inst "Instrucción de REV"
+    = _* "REV"i _* rd:reg64 _* "," _* src1:operand64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'REV');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+    / _* "REV"i _* rd:reg32 _* "," _* src1:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'REV');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+}
+
+rev16_inst "Instrucción de REV16"
+    =  _* "REV16"i _* rd:reg32 _* "," _* src1:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'REV16');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+}
+rev32_inst "Instrucción de REV"
+    = _* "REV32"i _* rd:reg64 _* "," _* src1:operand64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'REV32');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+
+
+
+
 // Instrucciones ADRP 
 adrp_inst "Instrucción de Adrp"
     = _* "ADRP"i _* rd:reg64 _* "," _* src1:label _* comment? "\n"?
@@ -655,7 +834,156 @@ bfi_inst
             addChild(node, src4Node);
             return node;
         }
+sbfiz_inst
+    = _* "SBFIZ"i _* rd:reg64 _* "," _* src1:reg64 _*  "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'SBFI');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+                
+            
+            return node;
+        }
+    / _* "SBFIZ"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'SBFIZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+        }
 
+ubfiz_inst
+    = _* "UBFIZ"i _* rd:reg64 _* "," _* src1:reg64 _*  "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'UBFIZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+                
+            
+            return node;
+        }
+    / _* "UBFIZ"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'UBFIZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+        }
+ubfx_inst
+    = _* "UBFX"i _* rd:reg64 _* "," _* src1:reg64 _*  "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'UBFX');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+                
+            
+            return node;
+        }
+    / _* "UBFX"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'UBFX');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+        }
+
+sbfx_inst
+    = _* "SBFX"i _* rd:reg64 _* "," _* src1:reg64 _*  "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'SBFX');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+                
+            
+            return node;
+        }
+    / _* "SBFX"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'SBFX');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+        }
 bfxil_inst
     = _* "BFXIL"i _* rd:reg64 _* "," _* src1:reg64 _*  "," _* src3:expression "," _* src4:expression _* comment? "\n"?
         {
@@ -678,6 +1006,44 @@ bfxil_inst
     / _* "BFXIL"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src3:expression "," _* src4:expression _* comment? "\n"?
         {
             const node = createNode('INSTRUCTION', 'BFXIL');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+
+        }
+
+extr_inst
+    = _* "EXTR"i _* rd:reg64 _* "," _* src1:reg64 _*  "," _* src3:operand64 "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'EXTR');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+  
+        }
+    / _* "EXTR"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src3:expression "," _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'EXTR');
             const rdNode = createNode('DESTINATION', 'RD');
             const src1Node = createNode('SOURCE1', 'SRC1');
             const src3Node = createNode('SOURCE3', 'SRC3');
