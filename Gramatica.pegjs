@@ -146,6 +146,8 @@ instruction
     /i:adr_inst
     /i:add_inst
     /i:adrp_inst
+    /i:tbnz_inst
+    /i:tbz_inst
     /i:bic_inst
     /i:eon_inst
     /i:ubfiz_inst
@@ -204,13 +206,18 @@ instruction
     / i:lsr_inst
     / i:asr_inst
     / i:ror_inst
+    / i:cbnz_inst
+    / i:cbz_inst
     / i:cnp_inst
     / i:cmp_inst
     / i:beq_inst
     / i:bne_inst
     / i:bgt_inst
     / i:blt_inst
+    / i:blr_inst
     / i:bl_inst
+    / i:br_inst
+    / i:bcc_inst
     / i:b_inst
     / i:ret_inst
     / i:svc_inst
@@ -285,6 +292,54 @@ adr_inst "Instrucción de Adr"
     / _* "ADR"i _* rd:reg32 _* "," _* src1:label _* comment? "\n"?
         {
             const node = createNode('INSTRUCTION', 'ADR');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+}
+
+cbnz_inst "Instrucción de CBNZ"
+    = _* "CBNZ"i _* rd:reg64 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CBNZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+    / _* "CBNZ"i _* rd:reg32 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CBNZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+}
+
+cbz_inst "Instrucción de CBNZ"
+    = _* "CBZ"i _* rd:reg64 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CBZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+    / _* "CBZ"i _* rd:reg32 _* "," _* src1:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CBZ');
             const rdNode = createNode('DESTINATION', 'RD');
             const src1Node = createNode('SOURCE1', 'SRC1');
             addChild(rdNode, rd);
@@ -1086,6 +1141,8 @@ bfxil_inst
             return node;
   
         }
+
+
     / _* "BFXIL"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src3:expression "," _* src4:expression _* comment? "\n"?
         {
             const node = createNode('INSTRUCTION', 'BFXIL');
@@ -1103,6 +1160,78 @@ bfxil_inst
             addChild(node, src4Node);
             return node;
 
+        }
+
+tbnz_inst
+    = _* "TBNZ"i _* rd:reg64 _* "," _* "#"? src1:(expression) _*  "," _* src3:expression _*  comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'TBNZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC2');
+
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            
+                
+            
+            return node;
+        }
+    / _* "TBNZ"i _* rd:reg32 _*"," _*  "#"?  src1:( expression) _*  "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'TBNZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC2');
+
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            
+            return node;
+        }
+
+tbz_inst
+    = _* "TBZ"i _* rd:reg64 _* "," _* "#"?  src1:( expression) _*  "," _* src3:expression _*  comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'TBZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC2');
+
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            
+                
+            
+            return node;
+        }
+    / _* "TBZ"i _* rd:reg32 _*"," _* "#"?  src1:(expression) _*  "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'TBZ');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src3Node = createNode('SOURCE3', 'SRC2');
+
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(node, rdNode);
+            addChild(node, src1Node); 
+            addChild(node, src3Node);
+            
+            return node;
         }
 
 extr_inst
@@ -1825,6 +1954,32 @@ b_inst "Instrucción B"
             const labelNode = createNode('LABEL', 'LBL');
             addChild(labelNode, l);
             addChild(node, labelNode);
+            return node;
+        }
+
+bcc_inst "Instrucción BCC"
+    = _* "BCC"i _* l:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'BCC');
+            const labelNode = createNode('LABEL', 'LBL');
+            addChild(labelNode, l);
+            addChild(node, labelNode);
+            return node;
+        }
+
+blr_inst "Instrucción BLR"
+    = _* "BLR"i _* l:reg64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'BLR');
+            addChild(node, l);
+            return node;
+        }
+
+br_inst "Instrucción BLR"
+    = _* "BR"i _* l:reg64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'BR');
+            addChild(node, l);
             return node;
         }
 
