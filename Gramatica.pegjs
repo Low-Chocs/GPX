@@ -146,6 +146,8 @@ instruction
     /i:adr_inst
     /i:add_inst
     /i:adrp_inst
+    /i:bic_inst
+    /i:eon_inst
     /i:ubfiz_inst
     /i:uxtb_inst
     /i:uxth_inst
@@ -156,6 +158,7 @@ instruction
     /i:bfxil_inst
     /i:sxtw_inst
     / i:clz_inst
+    / i:tst_inst
     / i:extr_inst
     / i:rbit_inst
     / i:rev_inst
@@ -185,9 +188,12 @@ instruction
     / i:and_inst
     / i:cls_inst
     / i:orr_inst
+    / i:orn_inst
     / i:eor_inst
     / i:mov_inst
-    / i:mvn_inst
+    / i:movk_inst
+    / i:movn_inst
+    / i:movz_inst
     / i:ldr_inst
     / i:ldrb_inst
     / i:ldp_inst
@@ -796,6 +802,83 @@ neg_inst
             addChild(node, src1Node);
             return node;
         }
+tst_inst
+    = _* "TST"i _* rd:reg64 _* "," _* src1:reg64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'TST');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+    / _* "TST"i _* rd:reg32 _* "," _* src1:reg32 _*  comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'TST');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            return node;
+        }
+
+bic_inst
+    = _* "BIC"i "S"i? _* rd:reg64 _* "," _* src1:reg64 _* "," _* src2:operand64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'BIC');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            return node;
+        }
+    / _* "BIC"i "S"i? _* rd:reg32 _* "," _* src1:reg32 _* "," _* src2:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'BIC');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            return node;
+        }
+
+eon_inst
+    = _* "EON"i  _* rd:reg64 _* "," _* src1:reg64 _* "," _* src2:operand64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'EON');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            return node;
+        }
+    / _* "EON"i "S"i? _* rd:reg32 _* "," _* src1:reg32 _* "," _* src2:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'EON');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            return node;
+        }
 
 bfi_inst
     = _* "BFI"i _* rd:reg64 _* "," _* src1:reg64 _*  "," _* src3:expression "," _* src4:expression _* comment? "\n"?
@@ -1239,6 +1322,32 @@ orr_inst
             addChild(node, src2);
             return node;
         }
+
+orn_inst
+    = _* "ORN"i _* rd:reg64 _* "," _* src1:reg64 _* "," _* src2:operand64 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'ORN');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            return node;
+        }
+    / _* "ORN"i _* rd:reg32 _* "," _* src1:reg32 _* "," _* src2:operand32 _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'ORN');
+            const rdNode = createNode('DESTINATION', 'RD');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            addChild(rdNode, rd);
+            addChild(src1Node, src1);
+            addChild(node, rdNode);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            return node;
+        }
 // Instrucciones XOR 64 bits y 32 bits (EOR)
 eor_inst
     = _* "EOR"i _* rd:reg64 _* "," _* src1:reg64 _* "," _* src2:operand64 _* comment? "\n"?
@@ -1270,6 +1379,45 @@ mov_inst "Instrucción MOV"
   = _* "MOV"i _* rd:reg64_or_reg32 _* "," _* src:mov_source _* comment? "\n"?
   {
     const node = createNode('INSTRUCTION', 'MOV');
+    const rdNode = createNode('DESTINATION', 'RD');
+    const srcNode = createNode('SOURCE1', 'SRC1');
+    addChild(rdNode, rd);
+    addChild(srcNode, src);
+    addChild(node, rdNode);
+    addChild(node, srcNode);
+    return node;
+  }
+
+movk_inst "Instrucción MOVK"
+  = _* "MOVK"i _* rd:reg64_or_reg32 _* "," _* src:(operand64/operand32) _* comment? "\n"?
+  {
+    const node = createNode('INSTRUCTION', 'MOVK');
+    const rdNode = createNode('DESTINATION', 'RD');
+    const srcNode = createNode('SOURCE1', 'SRC1');
+    addChild(rdNode, rd);
+    addChild(srcNode, src);
+    addChild(node, rdNode);
+    addChild(node, srcNode);
+    return node;
+  }
+
+movn_inst "Instrucción MOVN"
+  = _* "MOVN"i _* rd:reg64_or_reg32 _* "," _* src:(operand64/operand32) _* comment? "\n"?
+  {
+    const node = createNode('INSTRUCTION', 'MOVN');
+    const rdNode = createNode('DESTINATION', 'RD');
+    const srcNode = createNode('SOURCE1', 'SRC1');
+    addChild(rdNode, rd);
+    addChild(srcNode, src);
+    addChild(node, rdNode);
+    addChild(node, srcNode);
+    return node;
+  }
+
+movz_inst "Instrucción MOVK"
+  = _* "MOVZ"i _* rd:reg64_or_reg32 _* "," _* src:(operand64/operand32) _* comment? "\n"?
+  {
+    const node = createNode('INSTRUCTION', 'MOVZ');
     const rdNode = createNode('DESTINATION', 'RD');
     const srcNode = createNode('SOURCE1', 'SRC1');
     addChild(rdNode, rd);
