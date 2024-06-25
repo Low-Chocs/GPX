@@ -127,7 +127,7 @@ directive_p
 // Nombre de las directivas
 directive_name
   = "align" / "ascii" / "asciz" / "byte" / "hword" / "word" / "quad" /
-    "data" / "text" / "global" / "section" / "space" / "zero" / "incbin" / "set" / "equ" / "bss"
+    "data" / "text" / "global" / "section" / "space" / "zero" / "incbin" / "set" / "equ" / "bss" / "skip"
 
 // Secciones
 section
@@ -208,8 +208,8 @@ instruction
     / i:movk_inst
     / i:movn_inst
     / i:movz_inst
-    / i:ldr_inst
     / i:ldrb_inst
+    / i:ldr_inst
     / i:ldp_inst
     / i:strb_inst
     / i:str_inst
@@ -227,6 +227,7 @@ instruction
     / i:bgt_inst
     / i:blt_inst
     / i:blr_inst
+    / i:ble_inst
     / i:bl_inst
     / i:br_inst
     / i:bcc_inst
@@ -1575,6 +1576,7 @@ reg64_or_reg32 "Registro de 64 o 32 Bits"
 mov_source "Source para MOV"
   = reg64_or_reg32
   / immediate
+  /label
 
 //  Instucción Load Register (LDR)
 ldr_inst "Instrucción LDR"
@@ -1606,7 +1608,7 @@ ldr_source
             l.value = '=' + l.value;
             return [l];
         }
-    / "[" _* r:reg64_or_reg32 _* "," _* r2:reg64_or_reg32 _* "," _* s:shift_op _* i2:immediate _* "]"
+    / "[" _* r:(operand32/operand64) _* "," _* r2:(operand64/operand32) _* "," _* s:shift_op _* i2:immediate _* "]"
         {
             return [r, r2, s, i2];
         }
@@ -1618,7 +1620,7 @@ ldr_source
         {
             return [r, i, e];
         }
-    / "[" _* r:reg64 _* "," _* i:immediate _* "]"
+    / "[" _* r:reg64 _* "," _* i:(operand32/operand64) _* "]"
         {
             return [r, i];
         }
@@ -1720,7 +1722,7 @@ str_source
         {
             return [r, i, e];
         }
-    / "[" _* r:reg64 _* "," _* i:immediate _* "]"
+    / "[" _* r:reg64 _* "," _* i:(operand32/operand64) _* "]"
         {
             return [r, i];
         }
@@ -2313,6 +2315,16 @@ b_inst "Instrucción B"
             return node;
         }
 
+ble_inst "Instrucción BLE"
+    = _* "BLE"i _* l:label _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'BLE');
+            const labelNode = createNode('LABEL', 'LBL');
+            addChild(labelNode, l);
+            addChild(node, labelNode);
+            return node;
+        }
+
 bcc_inst "Instrucción BCC"
     = _* "BCC"i _* l:label _* comment? "\n"?
         {
@@ -2489,7 +2501,7 @@ operand32 "Operandor 32 Bits"
         }
     / i:immediate                             // Valor inmediato
         {
-            const node = createNode('SOURCE2', 'SRC2');
+            const node = createNode('SOURCE2', 'OP2');
             addChild(node, i);
             return node;
         
@@ -2569,13 +2581,8 @@ extend_op "Operador de Extensión"
 
 // Definición de valores inmediatos
 immediate "Inmediato"
-    = integer
-        {
-            const node = createNode('INMEDIATE_OP', 'Integer');
-            setValue(node, text());
-            return node;
-        }
-    / "#" "'"letter"'"
+    = 
+     "#" "'"letter"'"
         {
             const node = createNode('INMEDIATE_OP', '#');
             setValue(node, text());
@@ -2587,13 +2594,13 @@ immediate "Inmediato"
             setValue(node, text());
             return node;
         }
-    / "#" "0b" binary_literal
+    / "#"? "0b" binary_literal
         {
             const node = createNode('INMEDIATE_OP', '#');
             setValue(node, text());
             return node;
         }
-    / "#" integer
+    / "#"? _* "-"? _* integer
         {
             const node = createNode('INMEDIATE_OP', '#');
             setValue(node, text());
