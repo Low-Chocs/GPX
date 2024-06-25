@@ -154,6 +154,18 @@ instruction
     /i:uxtb_inst
     /i:uxth_inst
     /i:sbfiz_inst
+    /i:ccmn_inst 
+    /i:ccmp_inst
+    
+    /i:cset_inst
+    /i:csetm_inst
+    /i:csel_inst 
+    /i:csinc_inst
+    /i:csinv_inst
+    /i:csneg_inst
+    /i:cinc_inst
+    /i:cinv_inst
+    /i:cneg_inst    
     /i:sbfx_inst
     /i:ubfx_inst
     /i:bfi_inst
@@ -1926,6 +1938,350 @@ cmp_inst "Instrucción CMP"
             return node;
         }
 
+ccmn_inst "Instrucción CCMN"
+    = _* "CCMN"i _* src1:reg64 _* "," _* "#"? _* src2:expression _* "," _* "#"? _* src3:expression  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CCMN');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src2Node, src2);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2Node);
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CCMN"i _* src1:reg32 _* "," _* "#"? _* src2:expression _* "," _* "#"? _* src3:expression  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CCMN');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE2', 'SRC2');
+            const src4Node = createNode('SOURCE2', 'SRC2');
+            addChild(src1Node, src1);
+            addChild(src2Node, src2);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2Node);
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+        }
+
+ccmp_inst "Instrucción CCMP"
+    = _* "CCMP"i _* src1:reg64 _* "," _* "#"? _* src2:expression _* "," _* "#"? _* src3:expression  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CCMP');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src2Node, src2);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2Node);
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CCMP"i _* src1:reg32 _* "," _* "#"? _* src2:expression _* "," _* "#"? _* src3:expression  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CCMP');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE2', 'SRC2');
+            const src4Node = createNode('SOURCE2', 'SRC2');
+            addChild(src1Node, src1);
+            addChild(src2Node, src2);
+            addChild(src3Node, src3);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2Node);
+            addChild(node, src3Node);
+            addChild(node, src4Node);
+            return node;
+}
+
+cinc_inst "Instrucción CINC"
+    = _* "CINC"i _* src1:reg64 _* "," _*  src2:operand64 _* "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CINC');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            
+            
+            addChild(src1Node, src1);
+            
+            addChild(src3Node, src3);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3Node);
+            return node;
+        }
+    /  _* "CINC"i _* src1:reg32 _* "," _*  src2:operand32 _* "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CINC');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            
+            
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3Node);
+            return node;
+        }
+
+cinv_inst "Instrucción CINV"
+    = _* "CINV"i _* src1:reg64 _* "," _*  src2:operand64 _* "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CINV');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            
+            
+            addChild(src1Node, src1);
+            
+            addChild(src3Node, src3);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3Node);
+            return node;
+        }
+    /  _* "CINV"i _* src1:reg32 _* "," _*  src2:operand32 _* "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CINV');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            
+            
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3Node);
+            return node;
+        }
+
+cneg_inst "Instrucción CNEG"
+    = _* "CNEG"i _* src1:reg64 _* "," _*  src2:operand64 _* "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CNEG');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            
+            
+            addChild(src1Node, src1);
+            
+            addChild(src3Node, src3);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3Node);
+            return node;
+        }
+    /  _* "CNEG"i _* src1:reg32 _* "," _*  src2:operand32 _* "," _* src3:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CNEG');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src2Node = createNode('SOURCE2', 'SRC2');
+            const src3Node = createNode('SOURCE3', 'SRC3');
+            
+            
+            addChild(src1Node, src1);
+            addChild(src3Node, src3);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3Node);
+            return node;
+        }
+
+csel_inst "Instrucción CSEL"
+    = _* "CSEL"i _* src1:reg64 _* "," _* "#"? _* src2:operand64 _* "," _* "#"? _* src3:operand64  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSEL');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CSEL"i _* src1:reg32 _* "," _* "#"? _* src2:operand32 _* "," _* "#"? _* src3:operand32  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSEL');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+}
+
+csinc_inst "Instrucción CSINC"
+    = _* "CSINC"i _* src1:reg64 _* "," _* "#"? _* src2:operand64 _* "," _* "#"? _* src3:operand64  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSINC');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CSINC"i _* src1:reg32 _* "," _* "#"? _* src2:operand32 _* "," _* "#"? _* src3:operand32  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSINC');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+}
+
+csinv_inst "Instrucción CSINC"
+    = _* "CSINV"i _* src1:reg64 _* "," _* "#"? _* src2:operand64 _* "," _* "#"? _* src3:operand64  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSINV');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CSINV"i _* src1:reg32 _* "," _* "#"? _* src2:operand32 _* "," _* "#"? _* src3:operand32  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSINV');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+}
+
+csneg_inst "Instrucción CSINC"
+    = _* "CSNEG"i _* src1:reg64 _* "," _* "#"? _* src2:operand64 _* "," _* "#"? _* src3:operand64  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSINC');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CSNEG"i _* src1:reg32 _* "," _* "#"? _* src2:operand32 _* "," _* "#"? _* src3:operand32  _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSINC');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src2);
+            addChild(node, src3);
+            addChild(node, src4Node);
+            return node;
+}
+
+cset_inst "Instrucción CSET"
+    =  _* "CSET"i _* src1:reg64 _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSET');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CSET"i _* src1:reg32 _* "," _* "#"? _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSET');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src4Node);
+            return node;
+}
+
+csetm_inst "Instrucción CSETM"
+    =  _* "CSETM"i _* src1:reg64 _* ","  _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSETM');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src4Node);
+            return node;
+        }
+    /  _* "CSETM"i _* src1:reg32 _* ","  _* src4:expression _* comment? "\n"?
+        {
+            const node = createNode('INSTRUCTION', 'CSETM');
+            const src1Node = createNode('SOURCE1', 'SRC1');
+            const src4Node = createNode('SOURCE4', 'SRC4');
+            
+            addChild(src1Node, src1);
+            addChild(src4Node, src4);
+            addChild(node, src1Node);
+            addChild(node, src4Node);
+            return node;
+}
 cnp_inst "Instrucción CNP"
     = _* "CNP"i _* src1:reg64 _* "," _* src2:operand64 _* comment? "\n"?
         {
@@ -2262,7 +2618,7 @@ expression "Espresión"
 
 // Etiqueta
 label "Etiqueta"
-    = [a-zA-Z_][a-zA-Z0-9_]*
+    = [0-9]?[a-zA-Z_][a-zA-Z0-9_]*
         {
             const node = createNode('LABEL', 'Label');
             setValue(node, text());
